@@ -13,14 +13,29 @@ class Queue {
   enqueue(data) {
     Node tempNode = Node(data);
     Node previous = null;
+    bool isFirst = true;
+    bool isLast = false;
+
     if (this.rear == null) {
       this.front = this.rear = tempNode;
       return;
     }
     Node start = this.front;
     while (start != null && data >= start.data) {
+      isFirst = false;
       previous = start;
+      isLast = start.next == null;
       start = start.next;
+    }
+    if (isFirst) {
+      tempNode.next = start;
+      this.front = tempNode;
+      return;
+    }
+    if (isLast) {
+      this.rear.next = tempNode;
+      this.rear = tempNode;
+      return;
     }
     tempNode.next = start;
     if (previous != null) previous.next = tempNode;
@@ -93,11 +108,14 @@ class Node {
 
 main(List<String> args) {
   Queue queue = Queue();
-  print(queue.isEmpty);
-  print(queue.toList());
-  queue.enqueue(7);
-  queue.enqueue(31);
-  queue.enqueue(45);
+  // print(queue.isEmpty);
+  // print(queue.toList());
+  queue.enqueue(15);
+  queue.enqueue(10);
+  queue.enqueue(13);
+  print(queue);
+  print("front ${queue.front.data}");
+  print("rear ${queue.rear.data}");
   queue.enqueue(5);
   queue.enqueue(10);
   queue.enqueue(2);
@@ -109,11 +127,11 @@ main(List<String> args) {
   queue.enqueue(1);
   print(queue);
   print(queue.isEmpty);
-  print(queue.front.data);
+  print("front ${queue.front.data}");
   queue.enqueue(9);
-  print(queue.rear.data);
+  print("rear ${queue.rear.data}");
   queue.dequeue();
-  print(queue.front.data);
+  print("front ${queue.front.data}");
   queue.enqueue(24);
   print(queue);
   print(queue.toList());

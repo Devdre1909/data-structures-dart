@@ -1,7 +1,8 @@
 class Queue {
   Node front, rear;
+  bool isPriority;
 
-  Queue() {
+  Queue({this.isPriority = false}) {
     this.front = null;
     this.rear = null;
   }
@@ -16,8 +17,33 @@ class Queue {
       this.front = this.rear = tempNode;
       return;
     }
-    this.rear.next = tempNode;
-    this.rear = tempNode;
+    if (isPriority) {
+      Node start = this.front;
+      Node previous = null;
+      bool isFirst = true;
+      bool isLast = false;
+      while (start != null && data >= start.data) {
+        isFirst = false;
+        previous = start;
+        isLast = start.next == null;
+        start = start.next;
+      }
+      if (isFirst) {
+        tempNode.next = start;
+        this.front = tempNode;
+        return;
+      }
+      if (isLast) {
+        this.rear.next = tempNode;
+        this.rear = tempNode;
+        return;
+      }
+      tempNode.next = start;
+      if (previous != null) previous.next = tempNode;
+    } else {
+      this.rear.next = tempNode;
+      this.rear = tempNode;
+    }
   }
 
   /// Return and remove the last Node from the list
@@ -100,4 +126,10 @@ main(List<String> args) {
   print(queue.front.data);
   print(queue);
   print(queue.toList());
+
+  Queue pQueue = Queue(isPriority: true);
+  pQueue.enqueue(12);
+  pQueue.enqueue(10);
+  pQueue.enqueue(2);
+  print(pQueue);
 }
